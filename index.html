@@ -13,12 +13,30 @@
             <p>Cotizaciones internacionales en tiempo real y conversor universal</p>
         </header>
 
-        <!-- Tarjetas de cotización -->
+        <!-- Tarjetas de cotización (Con el Peso Argentino fijo incluido) -->
         <main id="divisas-grid" class="grid">
-            <p class="loading">Cargando cotizaciones...</p>
+            <!-- Tarjeta fija de Peso Argentino -->
+            <div class="card" data-code="ARS">
+                <h3>Peso Argentino (ARS)</h3>
+                <div class="values">
+                    <div class="val-box">
+                        <span class="label">Base</span>
+                        <span class="amount">$1.00</span>
+                    </div>
+                    <div class="val-box">
+                        <span class="label">Moneda</span>
+                        <span class="amount">Oficial</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- El resto de las tarjetas se cargan dinámicamente -->
+            <div id="dynamic-cards" style="display: contents;">
+                <p class="loading">Cargando cotizaciones...</p>
+            </div>
         </main>
 
-        <!-- Panel Interactivo de Conversión (Compacto y Libre) -->
+        <!-- Panel Interactivo de Conversión -->
         <section class="converter-card">
             <h2>🧮 Conversor Universal</h2>
             
@@ -31,7 +49,14 @@
                 <div class="input-group">
                     <label for="select-origen">De</label>
                     <select id="select-origen">
-                        <!-- Se puebla dinámicamente con JS -->
+                        <option value="ARS">Peso Argentino (ARS)</option>
+                        <option value="USD">Dólar (USD)</option>
+                        <option value="EUR">Euro (EUR)</option>
+                        <option value="BRL">Real (BRL)</option>
+                        <option value="CNY">Yuan (CNY)</option>
+                        <option value="NGN">Naira (NGN)</option>
+                        <option value="GBP">Libra (GBP)</option>
+                        <option value="JPY">Yen (JPY)</option>
                     </select>
                 </div>
 
@@ -40,7 +65,14 @@
                 <div class="input-group">
                     <label for="select-destino">A</label>
                     <select id="select-destino">
-                        <!-- Se puebla dinámicamente con JS -->
+                        <option value="ARS">Peso Argentino (ARS)</option>
+                        <option value="USD" selected>Dólar (USD)</option>
+                        <option value="EUR">Euro (EUR)</option>
+                        <option value="BRL">Real (BRL)</option>
+                        <option value="CNY">Yuan (CNY)</option>
+                        <option value="NGN">Naira (NGN)</option>
+                        <option value="GBP">Libra (GBP)</option>
+                        <option value="JPY">Yen (JPY)</option>
                     </select>
                 </div>
 
