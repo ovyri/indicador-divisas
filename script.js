@@ -43,6 +43,7 @@ async function cargarCotizaciones() {
         };
 
         const tarjetas = [
+            { id: 'ARS', nombre: 'Peso Argentino (ARS)', compra: '1.00', venta: '1.00' },
             { id: 'USD', nombre: 'Dólar Oficial (USD)', compra: dolar.compra, venta: dolarVenta.toFixed(2) },
             { id: 'EUR', nombre: 'Euro (EUR)', compra: euro.compra, venta: euroVenta.toFixed(2) },
             { id: 'BRL', nombre: 'Real Brasileño (BRL)', compra: real.compra, venta: realVenta.toFixed(2) },
@@ -132,7 +133,6 @@ function calcularConversion() {
     const valorDestinoEnARS = tasasGlobales[destino];
 
     if (valorOrigenEnARS && valorDestinoEnARS) {
-        // Conversión cruzada universal: (Monto * ValorOrigenARS) / ValorDestinoARS
         const enPesos = monto * valorOrigenEnARS;
         const resultado = enPesos / valorDestinoEnARS;
         
