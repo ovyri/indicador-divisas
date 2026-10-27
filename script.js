@@ -1,51 +1,129 @@
-import urllib.request
-import json
+let tasasGlobales = {};
 
-def consultar_divisas():
-    print("==================================================")
-    print("         🌍 INDICADOR GLOBAL DE DIVISAS          ")
-    print("==================================================")
-    print("Consultando cotizaciones en tiempo real...\n")
+async function cargarCotizaciones() {
+    const grid = document.getElementById('divisas-grid');
+    grid.innerHTML = '<p class="loading">Cargando cotizaciones en tiempo real...</p>';
 
-    try:
-        url_dolar = "https://dolarapi.com/v1/dolares/oficial"
-        req_dolar = urllib.request.Request(url_dolar, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req_dolar) as response:
-            dolar = json.loads(response.read().decode())
+    // Valores por defecto de respaldo por si falla alguna API
+    let dolar = { compra: "1510", venta: 1560 };
+    let euro = { compra: "1712", venta: 1726 };
+    let real = { compra: "284", venta: 284.9 };
+    let tasas = { CNY: 0.0043, NGN: 0.88, GBP: 0.00048, JPY: 0.1 };
 
-        url_euro = "https://dolarapi.com/v1/cotizaciones/eur"
-        req_euro = urllib.request.Request(url_euro, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req_euro) as response:
-            euro = json.loads(response.read().decode())
+    try {
+        const resDolar = await fetch('https://dolarapi.com/v1/dolares/oficial');
+        if (resDolar.ok) dolar = await resDolar.json();
 
-        url_real = "https://dolarapi.com/v1/cotizaciones/brl"
-        req_real = urllib.request.Request(url_real, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req_real) as response:
-            real = json.loads(response.read().decode())
+        const resEuro = await fetch('https://dolarapi.com/v1/cotizaciones/eur');
+        if (resEuro.ok) euro = await resEuro.json();
 
-        url_global = "https://open.er-api.com/v6/latest/ARS"
-        req_global = urllib.request.Request(url_global, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req_global) as response:
-            datos_global = json.loads(response.read().decode())
-        
-        tasas = datos_global['rates']
+        const resReal = await fetch('https://dolarapi.com/v1/cotizaciones/brl');
+        if (resReal.ok) real = await resReal.json();
 
-        yuan = 1 / tasas.get('CNY', 1)
-        naira = 1 / tasas.get('NGN', 1)
-        libra = 1 / tasas.get('GBP', 1)
-        yen = 1 / tasas.get('JPY', 1)
+        const resGlobal = await fetch('https://open.er-api.com/v6/latest/ARS');
+        if (resGlobal.ok) {
+            const datosGlobal = await resGlobal.json();
+            tasas = datosGlobal.rates;
+        }
+    } catch (e) {
+        console.warn("Aviso de red: Usando valores de respaldo", e);
+    }
 
-        print(f"💵 Dólar Oficial  -> Compra: ${dolar.get('compra')} | Venta: ${dolar.get('venta')}")
-        print(f"💶 Euro           -> Compra: ${euro.get('compra')} | Venta: ${euro.get('venta')}")
-        print(f"🇧🇷 Real Brasileño -> Compra: ${real.get('compra')} | Venta: ${real.get('venta')}")
-        print(f"🇨🇳 Yuan Chino     -> Valor aprox: ${yuan:.2f} ARS")
-        print(f"🇳🇬 Naira Nigeriana-> Valor aprox: ${naira:.2f} ARS")
-        print(f"🇬🇧 Libra Esterlina-> Valor aprox: ${libra:.2f} ARS")
-        print(f"🇯🇵 Yen Japonés    -> Valor aprox: ${yen:.2f} ARS")
-        print("==================================================")
+    try {
+        const dolarVenta = parseFloat(dolar.venta) || 1560;
+        const euroVenta = parseFloat(euro.venta) || 1726;
+        const realVenta = parseFloat(real.venta) || 284.9;
+        const yuanVenta = tasas.CNY ? (1 / tasas.CNY) : 230.47;
+        const nairaVenta = tasas.NGN ? (1 / tasas.NGN) : 1.13;
+        const libraVenta = tasas.GBP ? (1 / tasas.GBP) : 2057.61;
+        const yenVenta = tasas.JPY ? (1 / tasas.JPY) : 9.78;
 
-    except Exception as e:
-        print(f"❌ Error al conectar con las APIs: {e}")
+        tasasGlobales = {
+            'ARS': 1,
+            'USD': dolarVenta,
+            'EUR': euroVenta,
+            'BRL': realVenta,
+            'CNY': yuanVenta,
+            'NGN': nairaVenta,
+            'GBP': libraVenta,
+            'JPY': yenVenta
+        };
 
-if __name__ == "__main__":
-    consultar_divisas()
+        const tarjetas = [
+            { id: 'USD', nombre: 'Dólar Oficial (USD)', compra: dolar.compra || "1510", venta: dolarVenta.toFixed(2) },
+            { id: 'EUR', nombre: 'Euro (EUR)', compra: euro.compra || "1712", venta: euroVenta.toFixed(2) },
+            { id: 'BRL', nombre: 'Real Brasileño (BRL)', compra: real.compra || "284", venta: realVenta.toFixed(2) },
+            { id: 'CNY', nombre: 'Yuan Chino (CNY)', compra: yuanVenta.toFixed(2), venta: yuanVenta.toFixed(2) },
+            { id: 'NGN', nombre: 'Naira Nigeriana (NGN)', compra: nairaVenta.toFixed(2), venta: nairaVenta.toFixed(2) },
+            { id: 'GBP', nombre: 'Libra Esterlina (GBP)', compra: libraVenta.toFixed(2), venta: libraVenta.toFixed(2) },
+            { id: 'JPY', nombre: 'Yen Japonés (JPY)', compra: yenVenta.toFixed(2), venta: yenVenta.toFixed(2) }
+        ];
+
+        grid.innerHTML = '';
+
+        tarjetas.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.dataset.code = item.id;
+            card.innerHTML = `
+                <h3>${item.nombre}</h3>
+                <div class="values">
+                    <div class="val-box">
+                        <span class="label">Compra</span>
+                        <span class="amount">$${item.compra}</span>
+                    </div>
+                    <div class="val-box">
+                        <span class="label">Venta</span>
+                        <span class="amount">$${item.venta}</span>
+                    </div>
+                </div>
+            `;
+
+            card.addEventListener('click', () => {
+                document.getElementById('select-destino').value = item.id;
+                destacarTarjeta(card);
+                calcularConversion();
+            });
+
+            grid.appendChild(card);
+        });
+
+        document.getElementById('input-monto').addEventListener('input', calcularConversion);
+        document.getElementById('select-origen').addEventListener('change', calcularConversion);
+        document.getElementById('select-destino').addEventListener('change', () => {
+            const selectedCode = document.getElementById('select-destino').value;
+            const card = document.querySelector(`.card[data-code="${selectedCode}"]`);
+            if (card) destacarTarjeta(card);
+            calcularConversion();
+        });
+
+        calcularConversion();
+
+    } catch (error) {
+        grid.innerHTML = `<p class="loading">Error al renderizar cotizaciones: ${error.message}</p>`;
+    }
+}
+
+function calcularConversion() {
+    const monto = parseFloat(document.getElementById('input-monto').value) || 0;
+    const origen = document.getElementById('select-origen').value;
+    const destino = document.getElementById('select-destino').value;
+
+    const valorOrigenEnARS = tasasGlobales[origen];
+    const valorDestinoEnARS = tasasGlobales[destino];
+
+    if (valorOrigenEnARS && valorDestinoEnARS) {
+        const enPesos = monto * valorOrigenEnARS;
+        const resultado = enPesos / valorDestinoEnARS;
+        document.getElementById('input-resultado').value = `${resultado.toFixed(2)} ${destino}`;
+    } else {
+        document.getElementById('input-resultado').value = '0.00';
+    }
+}
+
+function destacarTarjeta(cardElement) {
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+    cardElement.classList.add('selected');
+}
+
+cargarCotizaciones();
