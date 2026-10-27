@@ -1,26 +1,27 @@
-# Indicador Global de Divisas 🌍💵
+# Indicador Global de Divisas 🌍🧮
 
-Proyecto full-stack/CLI para consultar y visualizar cotizaciones de divisas internacionales en tiempo real (Dólar Oficial, Euro, Real Brasileño, Yuan Chino y Naira Nigeriana) frente al peso argentino (ARS), mediante el consumo de múltiples APIs REST.
+Proyecto full-stack para consultar cotizaciones internacionales en tiempo real (Dólar Oficial, Euro, Real Brasileño, Yuan Chino y Naira Nigeriana) frente al peso argentino (ARS), integrando múltiples APIs REST y una **calculadora de conversión interactiva**.
 
-## 🚀 Características
-- **Interfaz Web Dinámica**: Diseño moderno y responsivo con soporte para modo oscuro construido en HTML5, CSS3 y JavaScript asíncrono (`fetch` API).
-- **Consumo de Múltiples APIs REST**: Integración en tiempo real con **DolarAPI** (USD, EUR, BRL) y **ExchangeRate-API** (CNY, NGN).
-- **Versión Consola (Python)**: Script en Python 3 para consulta rápida directa desde la terminal.
-- **Despliegue Continuo**: Publicado en vivo mediante GitHub Pages.
+## 🚀 Características Principales
+- **Interfaz Web Dinámica**: Diseño moderno y estructurado en modo oscuro (HTML5, CSS3 Grid/Flexbox).
+- **Calculadora Interactiva en Tiempo Real**: Selección de divisas con un clic sobre las tarjetas de cotización, cálculo de montos personalizados y actualización instantánea.
+- **Múltiples APIs REST**: Conexión con **DolarAPI** y **ExchangeRate-API** para datos precisos y actualizados.
+- **Versión de Consola (Python)**: Script en Python 3 para consultas rápidas desde la terminal.
+- **Despliegue Continuo**: Publicado y accesible en vivo a través de GitHub Pages.
 
 ## 🌐 Ver en Vivo
 Accedé a la aplicación desplegada: [https://ovyri.github.io/indicador-divisas/](https://ovyri.github.io/indicador-divisas/)
 
 ## 🛠️ Tecnologías Utilizadas
-- **Python 3** (Consola)
-- **JavaScript (ES6+)** (Asincronismo / `async` & `await`)
-- **HTML5 & CSS3** (Flexbox, CSS Grid, Media Queries)
-- **Git & GitHub Pages**
+- **JavaScript (ES6+)**: Manejo de asincronismo (`async/await`), eventos del DOM y lógica de conversión.
+- **HTML5 & CSS3**: Diseño responsivo y estético con variables CSS.
+- **Python 3**: Automatización y consultas de consola.
+- **Git, GitHub & GitHub Pages**: Control de versiones y despliegue web.
 
 ## 💻 Ejecución Local
 
 ### Versión Web:
-Simplemente abrí el archivo `index.html` en cualquier navegador web o utilizá la extensión Live Server de VS Code.
+Abre el archivo `index.html` en tu navegador favorito o utiliza la extensión *Live Server* en VS Code.
 
 ### Versión Consola (Python):
 ```bash
