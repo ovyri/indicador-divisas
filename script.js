@@ -2,9 +2,10 @@ let tasasGlobales = {};
 
 async function cargarCotizaciones() {
     const container = document.getElementById('dynamic-cards');
-    container.innerHTML = '<p class="loading">Actualizando cotizaciones...</p>';
+    container.innerHTML = '<p class="loading">Actualizando cotizaciones en tiempo real...</p>';
 
     try {
+        // 1. Consumo de APIs oficiales en tiempo real
         const resDolar = await fetch('https://dolarapi.com/v1/dolares/oficial');
         const dolar = await resDolar.json();
 
@@ -18,6 +19,7 @@ async function cargarCotizaciones() {
         const datosGlobal = await resGlobal.json();
         const tasas = datosGlobal.rates;
 
+        // 2. Cálculo exacto del valor en ARS por unidad de cada divisa
         const dolarVenta = parseFloat(dolar.venta);
         const euroVenta = parseFloat(euro.venta);
         const realVenta = parseFloat(real.venta);
@@ -37,6 +39,30 @@ async function cargarCotizaciones() {
             'JPY': yenVenta
         };
 
+        // Actualizamos la tarjeta fija de ARS para mostrar información clara de la moneda base
+        const cardArs = document.querySelector('.card[data-code="ARS"]');
+        if (cardArs) {
+            cardArs.innerHTML = `
+                <h3>Peso Argentino (ARS)</h3>
+                <div class="values">
+                    <div class="val-box">
+                        <span class="label">Referencia</span>
+                        <span class="amount">$1.00 ARS</span>
+                    </div>
+                    <div class="val-box">
+                        <span class="label">Moneda Base</span>
+                        <span class="amount">Oficial</span>
+                    </div>
+                </div>
+            `;
+            cardArs.addEventListener('click', () => {
+                document.getElementById('select-destino').value = 'ARS';
+                destacarTarjeta(cardArs);
+                calcularConversion();
+            });
+        }
+
+        // Tarjetas internacionales con sus valores reales en pesos
         const tarjetas = [
             { id: 'USD', nombre: 'Dólar Oficial (USD)', compra: dolar.compra, venta: dolarVenta.toFixed(2) },
             { id: 'EUR', nombre: 'Euro (EUR)', compra: euro.compra, venta: euroVenta.toFixed(2) },
@@ -48,13 +74,6 @@ async function cargarCotizaciones() {
         ];
 
         container.innerHTML = '';
-
-        // Permitir clic en la tarjeta de ARS fija también
-        document.querySelector('.card[data-code="ARS"]').addEventListener('click', () => {
-            document.getElementById('select-destino').value = 'ARS';
-            destacarTarjeta(document.querySelector('.card[data-code="ARS"]'));
-            calcularConversion();
-        });
 
         tarjetas.forEach(item => {
             const card = document.createElement('div');
@@ -95,7 +114,7 @@ async function cargarCotizaciones() {
         calcularConversion();
 
     } catch (error) {
-        container.innerHTML = `<p class="loading">Error al cargar cotizaciones: ${error.message}</p>`;
+        container.innerHTML = `<p class="loading">Error al cargar cotizaciones en tiempo real: ${error.message}</p>`;
     }
 }
 
