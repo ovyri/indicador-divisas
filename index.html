@@ -13,27 +13,9 @@
             <p>Cotizaciones internacionales en tiempo real y conversor universal</p>
         </header>
 
-        <!-- Tarjetas de cotización (Con el Peso Argentino fijo incluido) -->
+        <!-- Tarjetas de cotización dinámicas -->
         <main id="divisas-grid" class="grid">
-            <!-- Tarjeta fija de Peso Argentino -->
-            <div class="card" data-code="ARS">
-                <h3>Peso Argentino (ARS)</h3>
-                <div class="values">
-                    <div class="val-box">
-                        <span class="label">Base</span>
-                        <span class="amount">$1.00</span>
-                    </div>
-                    <div class="val-box">
-                        <span class="label">Moneda</span>
-                        <span class="amount">Oficial</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- El resto de las tarjetas se cargan dinámicamente -->
-            <div id="dynamic-cards" style="display: contents;">
-                <p class="loading">Cargando cotizaciones...</p>
-            </div>
+            <p class="loading">Cargando cotizaciones...</p>
         </main>
 
         <!-- Panel Interactivo de Conversión -->
