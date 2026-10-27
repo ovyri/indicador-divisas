@@ -8,25 +8,21 @@ def consultar_divisas():
     print("Consultando cotizaciones en tiempo real...\n")
 
     try:
-        # 1. Consultar Dólar Oficial
         url_dolar = "https://dolarapi.com/v1/dolares/oficial"
         req_dolar = urllib.request.Request(url_dolar, headers={'User-Agent': 'Mozilla/5.0'})
         with urllib.request.urlopen(req_dolar) as response:
             dolar = json.loads(response.read().decode())
 
-        # 2. Consultar Euro
         url_euro = "https://dolarapi.com/v1/cotizaciones/eur"
         req_euro = urllib.request.Request(url_euro, headers={'User-Agent': 'Mozilla/5.0'})
         with urllib.request.urlopen(req_euro) as response:
             euro = json.loads(response.read().decode())
 
-        # 3. Consultar Real
         url_real = "https://dolarapi.com/v1/cotizaciones/brl"
         req_real = urllib.request.Request(url_real, headers={'User-Agent': 'Mozilla/5.0'})
         with urllib.request.urlopen(req_real) as response:
             real = json.loads(response.read().decode())
 
-        # 4. Consultar tasas globales (ARS base) para Yuan, Naira, Libra y Yen
         url_global = "https://open.er-api.com/v6/latest/ARS"
         req_global = urllib.request.Request(url_global, headers={'User-Agent': 'Mozilla/5.0'})
         with urllib.request.urlopen(req_global) as response:
@@ -39,7 +35,6 @@ def consultar_divisas():
         libra = 1 / tasas.get('GBP', 1)
         yen = 1 / tasas.get('JPY', 1)
 
-        # Mostrar resultados en consola
         print(f"💵 Dólar Oficial  -> Compra: ${dolar.get('compra')} | Venta: ${dolar.get('venta')}")
         print(f"💶 Euro           -> Compra: ${euro.get('compra')} | Venta: ${euro.get('venta')}")
         print(f"🇧🇷 Real Brasileño -> Compra: ${real.get('compra')} | Venta: ${real.get('venta')}")

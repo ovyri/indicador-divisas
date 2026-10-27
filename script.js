@@ -2,41 +2,29 @@ let tasasGlobales = {};
 
 async function cargarCotizaciones() {
     const grid = document.getElementById('divisas-grid');
-    grid.innerHTML = '<p class="loading">Cargando cotizaciones en tiempo real...</p>';
-
-    // Valores por defecto de respaldo por si falla alguna API
-    let dolar = { compra: "1510", venta: 1560 };
-    let euro = { compra: "1712", venta: 1726 };
-    let real = { compra: "284", venta: 284.9 };
-    let tasas = { CNY: 0.0043, NGN: 0.88, GBP: 0.00048, JPY: 0.1 };
+    grid.innerHTML = '<p class="loading">Cargando cotizaciones...</p>';
 
     try {
         const resDolar = await fetch('https://dolarapi.com/v1/dolares/oficial');
-        if (resDolar.ok) dolar = await resDolar.json();
+        const dolar = await resDolar.json();
 
         const resEuro = await fetch('https://dolarapi.com/v1/cotizaciones/eur');
-        if (resEuro.ok) euro = await resEuro.json();
+        const euro = await resEuro.json();
 
         const resReal = await fetch('https://dolarapi.com/v1/cotizaciones/brl');
-        if (resReal.ok) real = await resReal.json();
+        const real = await resReal.json();
 
         const resGlobal = await fetch('https://open.er-api.com/v6/latest/ARS');
-        if (resGlobal.ok) {
-            const datosGlobal = await resGlobal.json();
-            tasas = datosGlobal.rates;
-        }
-    } catch (e) {
-        console.warn("Aviso de red: Usando valores de respaldo", e);
-    }
+        const datosGlobal = await resGlobal.json();
+        const tasas = datosGlobal.rates;
 
-    try {
-        const dolarVenta = parseFloat(dolar.venta) || 1560;
-        const euroVenta = parseFloat(euro.venta) || 1726;
-        const realVenta = parseFloat(real.venta) || 284.9;
-        const yuanVenta = tasas.CNY ? (1 / tasas.CNY) : 230.47;
-        const nairaVenta = tasas.NGN ? (1 / tasas.NGN) : 1.13;
-        const libraVenta = tasas.GBP ? (1 / tasas.GBP) : 2057.61;
-        const yenVenta = tasas.JPY ? (1 / tasas.JPY) : 9.78;
+        const dolarVenta = parseFloat(dolar.venta);
+        const euroVenta = parseFloat(euro.venta);
+        const realVenta = parseFloat(real.venta);
+        const yuanVenta = 1 / tasas.CNY;
+        const nairaVenta = 1 / tasas.NGN;
+        const libraVenta = 1 / tasas.GBP;
+        const yenVenta = 1 / tasas.JPY;
 
         tasasGlobales = {
             'ARS': 1,
@@ -50,9 +38,9 @@ async function cargarCotizaciones() {
         };
 
         const tarjetas = [
-            { id: 'USD', nombre: 'Dólar Oficial (USD)', compra: dolar.compra || "1510", venta: dolarVenta.toFixed(2) },
-            { id: 'EUR', nombre: 'Euro (EUR)', compra: euro.compra || "1712", venta: euroVenta.toFixed(2) },
-            { id: 'BRL', nombre: 'Real Brasileño (BRL)', compra: real.compra || "284", venta: realVenta.toFixed(2) },
+            { id: 'USD', nombre: 'Dólar Oficial (USD)', compra: dolar.compra, venta: dolarVenta.toFixed(2) },
+            { id: 'EUR', nombre: 'Euro (EUR)', compra: euro.compra, venta: euroVenta.toFixed(2) },
+            { id: 'BRL', nombre: 'Real Brasileño (BRL)', compra: real.compra, venta: realVenta.toFixed(2) },
             { id: 'CNY', nombre: 'Yuan Chino (CNY)', compra: yuanVenta.toFixed(2), venta: yuanVenta.toFixed(2) },
             { id: 'NGN', nombre: 'Naira Nigeriana (NGN)', compra: nairaVenta.toFixed(2), venta: nairaVenta.toFixed(2) },
             { id: 'GBP', nombre: 'Libra Esterlina (GBP)', compra: libraVenta.toFixed(2), venta: libraVenta.toFixed(2) },
@@ -100,7 +88,7 @@ async function cargarCotizaciones() {
         calcularConversion();
 
     } catch (error) {
-        grid.innerHTML = `<p class="loading">Error al renderizar cotizaciones: ${error.message}</p>`;
+        grid.innerHTML = `<p class="loading">Error al cargar cotizaciones: ${error.message}</p>`;
     }
 }
 

@@ -103,7 +103,6 @@ header p {
     color: var(--accent-color);
 }
 
-/* Conversor compacto */
 .converter-card {
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);
