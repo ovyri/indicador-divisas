@@ -10,7 +10,7 @@
     <div class="container">
         <header>
             <h1>🌍 Indicador Global de Divisas</h1>
-            <p>Cotizaciones internacionales en tiempo real y calculadora de conversión</p>
+            <p>Cotizaciones internacionales en tiempo real y conversor universal</p>
         </header>
 
         <!-- Tarjetas de cotización -->
@@ -18,35 +18,34 @@
             <p class="loading">Cargando cotizaciones...</p>
         </main>
 
-        <!-- Panel Interactivo de Conversión -->
-        <section id="converter-section" class="converter-card">
-            <h2 id="converter-title">🧮 Conversor de Divisas</h2>
-            <p class="converter-instruction">Haz clic en cualquier divisa arriba para seleccionarla o elegila abajo:</p>
+        <!-- Panel Interactivo de Conversión (Compacto y Libre) -->
+        <section class="converter-card">
+            <h2>🧮 Conversor Universal</h2>
             
             <div class="converter-controls">
                 <div class="input-group">
-                    <label for="input-monto">Monto a cambiar:</label>
+                    <label for="input-monto">Monto</label>
                     <input type="number" id="input-monto" placeholder="0.00" value="1000" min="0">
                 </div>
 
                 <div class="input-group">
-                    <label for="select-origen">De:</label>
+                    <label for="select-origen">De</label>
                     <select id="select-origen">
-                        <option value="ARS">Pesos Argentinos (ARS)</option>
+                        <!-- Se puebla dinámicamente con JS -->
                     </select>
                 </div>
 
-                <span class="equals-sign">=</span>
+                <span class="equals-sign">⇄</span>
 
                 <div class="input-group">
-                    <label for="select-destino">A:</label>
+                    <label for="select-destino">A</label>
                     <select id="select-destino">
                         <!-- Se puebla dinámicamente con JS -->
                     </select>
                 </div>
 
                 <div class="input-group">
-                    <label for="input-resultado">Resultado:</label>
+                    <label for="input-resultado">Resultado</label>
                     <input type="text" id="input-resultado" value="0.00" readonly>
                 </div>
             </div>
