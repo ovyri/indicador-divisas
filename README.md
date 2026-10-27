@@ -22,7 +22,7 @@ Accedé a la aplicación desplegada: [https://ovyri.github.io/indicador-divisas/
 ## 💻 Ejecución Local
 
 ### Versión Web:
-Abre el archivo `index.html` en tu navegador favorito o utiliza la extensión *Live Server* en VS Code.
+Abre el archivo `index.html` en tu navegador favorito.
 
 ### Versión Consola (Python):
 ```bash
